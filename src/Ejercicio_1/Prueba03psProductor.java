@@ -18,6 +18,8 @@ public class Prueba03psProductor {
         
         System.out.println("Dato 1 enviado");
         System.out.println("Dato 2 enviado");
+        System.out.println("Argumento 1 = " + args[0]);
+        System.out.println("Argumento 2 = " + args[1]);
         System.out.println("Fin"); // Fin programa
         
     }

@@ -4,6 +4,12 @@
  */
 package Ejercicio_1;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author anaranjo
@@ -12,13 +18,15 @@ public class Prueba04psOrquestador {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
         
         // Nombre de la clase principal (sin .class) para ejecutar
-        String productor = "Productor";
-        String consumidor = "Consumidor";
+        String productor = "Prueba03psProductor";
+        String consumidor = "Prueba02psConsumidor";
 
         // Crear el ProcessBuilder para el primer programa (Productor)
         ProcessBuilder pbProductor = new ProcessBuilder("java", productor);
@@ -50,12 +58,12 @@ public class Prueba04psOrquestador {
         // En este ejemplo, la salida ya se imprimiría si no has redirigido previamente.
 
         // Si quisieras que el Orquestador esperara la salida del Consumidor:
-        // try (BufferedReader reader = new BufferedReader(new InputStreamReader(consumidorProcess.getInputStream()))) {
-        //     String line;
-        //     while ((line = reader.readLine()) != null) {
-        //         System.out.println("[Salida del Consumidor]: " + line);
-        //     }
-        // }
+         try (BufferedReader reader = new BufferedReader(new InputStreamReader(consumidorProcess.getInputStream()))) {
+             String line;
+             while ((line = reader.readLine()) != null) {
+                 System.out.println("[Salida del Consumidor]: " + line);
+             }
+         }
         
     }
     
