@@ -37,7 +37,7 @@ public class Padre {
             System.out.println("Madre: " + lineaMadre);
 
             // Se llama al proceso hijo
-            pbHijo = new ProcessBuilder("java", "C:\\Users\\anaranjo\\dam\\2526\\PSP2526_Tarea01\\src\\Ejercicio_1\\Hijo.java", lineaMadre);
+            pbHijo = new ProcessBuilder("java", "Hijo.java", lineaMadre);
             psHijo = pbHijo.start();
 
             // Se recoge el mensaje del proceso Hijo
@@ -53,7 +53,7 @@ public class Padre {
                     System.out.println("Dice Mario que '" + lineaHijo + "'");
                 }
             } else {
-                System.err.println("El niño no se ha despertado...");
+                System.out.println("El niño no se ha despertado...");
             }
         }
     }
