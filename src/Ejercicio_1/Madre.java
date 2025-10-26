@@ -4,10 +4,6 @@
  */
 package Ejercicio_1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  *
  * @author anaranjo
@@ -19,8 +15,9 @@ public class Madre {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-
-        System.out.println("Madre: Dile al niño que haga los deberes");
+        String mensaje;
+        mensaje = "Dile al niño que haga los deberes";
+        System.out.println(mensaje);
     }
 
 }

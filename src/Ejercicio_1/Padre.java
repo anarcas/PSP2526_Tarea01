@@ -16,23 +16,45 @@ public class Padre {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.InterruptedException
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, IOException {
         // TODO code application logic here
-        
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader bf = new BufferedReader(isr);
-        String linea = null;
-        try {
-            linea = bf.readLine();
-            while (linea != null && linea.compareTo("Fin") != 0) {
-                System.out.println("Hola Mamá respondo Papá a: " + linea);
-                linea = bf.readLine();
-            }
-        } catch (IOException ex) {
-            System.err.println("Se ha producido un error en E/S");
-        }
-        
-    }
 
+        BufferedReader bfMadre;
+        String lineaMadre;
+
+        ProcessBuilder pbHijo;
+        Process psHijo;
+        BufferedReader brHijo;
+        String lineaHijo;
+        int exit;
+
+        // Se imprime la petición de la madre
+        bfMadre = new BufferedReader(new InputStreamReader(System.in));
+        while ((lineaMadre = bfMadre.readLine()) != null) {
+            System.out.println("Madre: " + lineaMadre);
+
+            // Se llama al proceso hijo
+            pbHijo = new ProcessBuilder("java", "C:\\Users\\anaranjo\\dam\\2526\\PSP2526_Tarea01\\src\\Ejercicio_1\\Hijo.java", lineaMadre);
+            psHijo = pbHijo.start();
+
+            // Se recoge el mensaje del proceso Hijo
+            brHijo = new BufferedReader(new InputStreamReader(psHijo.getInputStream()));
+            // Se espera que el proceso Hijo responda
+            System.out.println("(Despertando a Mario)");
+            // Se espera a que el proceso Hijo termine
+            // Se emplea waitFor() aunque readLine() sea bloqueante, de cara a una ampliación futura de la aplicación
+            exit = psHijo.waitFor();
+            // Una vez ha terminado el proceso Hijo se muestra en pantalla su respuesta
+            if (exit == 1) {
+                while ((lineaHijo = brHijo.readLine()) != null) {
+                    System.out.println("Dice Mario que '" + lineaHijo + "'");
+                }
+            } else {
+                System.err.println("El niño no se ha despertado...");
+            }
+        }
+    }
 }

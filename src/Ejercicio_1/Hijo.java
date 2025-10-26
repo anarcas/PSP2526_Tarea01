@@ -15,9 +15,13 @@ public class Hijo {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        
-        
+        if (args[0].length() == 0) {
+            System.out.println("No entiendo... ¿me puedes repetir papá?");
+        } else {
+            System.out.println("Vaaaaale");
+        }
+
+        System.exit(1);
     }
-    
+
 }
