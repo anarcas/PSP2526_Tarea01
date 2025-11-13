@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author anaranjo
+ * @author Antonio Naranjo Castillo
  */
 public class Padre {
 

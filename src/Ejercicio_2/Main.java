@@ -4,9 +4,11 @@
  */
 package Ejercicio_2;
 
+import java.util.Random;
+
 /**
  *
- * @author anaranjo
+ * @author Antonio Naranjo Castillo
  */
 public class Main {
 
@@ -18,23 +20,25 @@ public class Main {
 
         // DECLARACIÓN DE VARIABLES
         String nombreGato;
-
+        int cestaPescador;
+        
+        // Recurso compartido
         Cesta cestaGatos = new Cesta();
-        Cesta cestaPescador = new Cesta();
-
+        
+        // Hilos productor y consumidores
         Thread hiloPescador;
-        Thread hiloGato;
+        Thread hiloGatos;
 
         // INICIACIÓN DE HILOS
         // HILO PESCADOR
-        hiloPescador = new Thread(new Pescador(cestaPescador), "Pescador");
+        hiloPescador = new Thread(new Pescador(cestaGatos), "Antonio");
         hiloPescador.start();
 
         // HILOS GATOS
         for (int i = 1; i <= 3; i++) {
             nombreGato = String.format("[GATO %d]", i);
-            hiloGato = new Thread(new Gatos(cestaGatos,i), nombreGato);
-            hiloGato.start();
+            hiloGatos = new Thread(new Gatos(cestaGatos,i), nombreGato);
+            hiloGatos.start();
 
         }
 

@@ -4,24 +4,76 @@
  */
 package Ejercicio_2;
 
+import java.util.Random;
+
 /**
  *
- * @author anaranjo
+ * @author Antonio Naranjo Castillo
  */
 public class Cesta {
 
-    private int numPeces = 0;
+    // Declaración de variables e iniciación si procede
+    int numPecesCestaGatos = 0;
+    int numPecesCestaPescador = 0;
+    int numCestas = 2;
+    Random numAleatorio = new Random();
+    int eleccionPescador;
+    String mensajeGatos="Miau!";
 
+    // Colores 
+    public final String reset = "\u001B[0m";
+    public final String negro = "\u001B[30m";
+    public final String rojo = "\u001B[31m";
+    public final String verde = "\u001B[32m";
+    public final String amarillo = "\u001B[33m";
+    public final String azul = "\u001B[34m";
+    public final String magenta = "\u001B[35m";
+    public final String cian = "\u001B[36m";
+    public final String blanco = "\u001B[37m";
+
+    // Método comerPez que será ejecutado por los gatos, hilos consumidores
     public synchronized void comerPez() throws InterruptedException {
-        
-        while (numPeces < 1) {
+
+        System.out.println(String.format("%s %s",  Thread.currentThread().getName(), mensajeGatos));
+
+        // Mientras no existan peces en la cesta, los gatos esperan
+        while (numPecesCestaPescador<10 && numPecesCestaGatos < 1) {
             wait();
         }
-        numPeces--;
+        numPecesCestaGatos--;
+        notifyAll();
     }
 
-    public void pescarPez() {
-        numPeces++;
+    // Método pescarPez que será ejecutado por el pescador, hilo productor
+    public synchronized void pescarPez() throws InterruptedException {
+
+        // Elección del pescador, 1-> colocará el pez en la cesta del pescador, 2-> colocará el pez en la cesta de los gatos
+        eleccionPescador = numAleatorio.nextInt(numCestas) + 1;
+        switch (eleccionPescador) {
+
+            case 1:
+                if (numPecesCestaPescador < 10) {
+                    numPecesCestaPescador++;
+                    System.out.println(String.format("El pescador guarda un pez en su cesta personal. (CestaPescador:%d)", numPecesCestaPescador));
+                }
+                break;
+            case 2:
+                if (numPecesCestaGatos < 2) {
+                    numPecesCestaGatos++;
+                    System.out.println(String.format("El pescador deja un pez en la cesta de los gatos. (CestaGatos:%d)", numPecesCestaGatos));
+                    notifyAll();
+                } else if (numPecesCestaPescador <10) {
+                    System.out.println(String.format("%sEl pescador espera para dejar un pez en la cesta de los gatos. (CestaGatos:%d)%s", magenta, numPecesCestaGatos, reset));
+                    wait();
+                    numPecesCestaGatos++;
+                    System.out.println(String.format("El pescador deja un pez en la cesta de los gatos. (CestaGatos:%d)", numPecesCestaGatos));
+                    notifyAll();
+                }
+                break;
+            default:
+                System.out.println("\u001B[31m" + "Existe un error en la elección tomada por el pescador o existen más de dos cestas." + "\u001B[0m");
+        }
+
     }
 
 }

@@ -6,7 +6,7 @@ package Ejercicio_1;
 
 /**
  *
- * @author anaranjo
+ * @author Antonio Naranjo Castillo
  */
 public class Madre {
 
