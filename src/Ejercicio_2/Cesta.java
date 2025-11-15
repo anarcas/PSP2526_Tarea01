@@ -18,7 +18,7 @@ public class Cesta {
     int numCestas = 2;
     Random numAleatorio = new Random();
     int eleccionPescador;
-    String mensajeGatos="Miau!";
+    String mensajeGatos = "Miau!";
 
     // Colores 
     public final String reset = "\u001B[0m";
@@ -34,14 +34,25 @@ public class Cesta {
     // Método comerPez que será ejecutado por los gatos, hilos consumidores
     public synchronized void comerPez() throws InterruptedException {
 
-        System.out.println(String.format("%s %s",  Thread.currentThread().getName(), mensajeGatos));
+        
 
         // Mientras no existan peces en la cesta, los gatos esperan
-        while (numPecesCestaPescador<10 && numPecesCestaGatos < 1) {
+        while (numPecesCestaGatos < 1 && numPecesCestaPescador<10) {
+            notifyAll();
             wait();
+//            if (numPecesCestaGatos != 0) {
+//                numPecesCestaGatos--;
+//            } else {
+//                notifyAll();
+//            }
+
         }
+        if (numPecesCestaGatos>0){
         numPecesCestaGatos--;
-        notifyAll();
+                            System.out.println(String.format("%s ha cogido un pez. (CestaGatos: %d).", Thread.currentThread().getName(),numPecesCestaGatos));
+
+        }
+        //despedida();
     }
 
     // Método pescarPez que será ejecutado por el pescador, hilo productor
@@ -62,7 +73,8 @@ public class Cesta {
                     numPecesCestaGatos++;
                     System.out.println(String.format("El pescador deja un pez en la cesta de los gatos. (CestaGatos:%d)", numPecesCestaGatos));
                     notifyAll();
-                } else if (numPecesCestaPescador <10) {
+                //} else if (numPecesCestaPescador < 10) {
+                    } else {
                     System.out.println(String.format("%sEl pescador espera para dejar un pez en la cesta de los gatos. (CestaGatos:%d)%s", magenta, numPecesCestaGatos, reset));
                     wait();
                     numPecesCestaGatos++;
@@ -73,7 +85,61 @@ public class Cesta {
             default:
                 System.out.println("\u001B[31m" + "Existe un error en la elección tomada por el pescador o existen más de dos cestas." + "\u001B[0m");
         }
-
     }
 
+    /**
+     *
+     * @throws InterruptedException
+     */
+    public synchronized void despedidaPescador() throws InterruptedException {
+        if (numPecesCestaPescador == 10) {
+            System.out.println("Que me voy!!! se despide: " + Thread.currentThread().getName());
+            System.out.println("Recogiendo caña.");
+            notifyAll();
+
+        }
+    }
+    
+    public void saludoGato(){
+        
+        String [] numGato=Thread.currentThread().getName().split(" ");
+        int idGato=Integer.parseInt(numGato[1].split("]")[0]);
+    
+        switch (idGato) {
+
+                case 1:
+                    System.out.println(String.format("%s%s %s %s", rojo, Thread.currentThread().getName(), mensajeGatos, reset));
+                    break;
+                case 2:
+                    System.out.println(String.format("%s%s %s %s", verde, Thread.currentThread().getName(), mensajeGatos, reset));
+                    break;
+                case 3:
+                    System.out.println(String.format("%s%s %s %s", amarillo, Thread.currentThread().getName(), mensajeGatos, reset));
+                    break;
+                default:
+            }
+    }
+    /**
+     *
+     */
+    public void despedidaGato(){
+        
+        String [] numGato=Thread.currentThread().getName().split(" ");
+        int idGato=Integer.parseInt(numGato[1].split("]")[0]);
+    
+        switch (idGato) {
+
+                case 1:
+                    System.out.println(String.format("%s%s %s %s", rojo, Thread.currentThread().getName(), "hasta la vista", reset));
+                    break;
+                case 2:
+                    System.out.println(String.format("%s%s %s %s", verde, Thread.currentThread().getName(), "nos vemos mañana", reset));
+                    break;
+                case 3:
+                    System.out.println(String.format("%s%s %s %s", amarillo, Thread.currentThread().getName(), "ya si eso nos vemos", reset));
+                    break;
+                default:
+            }
+        
+    }
 }

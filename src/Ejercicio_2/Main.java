@@ -22,6 +22,7 @@ public class Main {
         String nombreGato;
         int cestaPescador;
         
+        
         // Recurso compartido
         Cesta cestaGatos = new Cesta();
         
@@ -41,6 +42,7 @@ public class Main {
             hiloGatos.start();
 
         }
+        
 
     }
 

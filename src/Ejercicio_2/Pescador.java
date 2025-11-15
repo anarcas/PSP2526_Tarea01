@@ -47,16 +47,18 @@ public class Pescador implements Runnable {
 
                 cesta.pescarPez();
             }
+            
+            cesta.despedidaPescador();
 
-            while (cesta.numPecesCestaGatos != 0) {
-                tiempoEsperaPescador = (numAleatorio.nextLong(5) + 1) * 1000;
-
-                Thread.sleep(tiempoEsperaPescador);
-            }
+//            while (cesta.numPecesCestaGatos != 0) {
+//                tiempoEsperaPescador = (numAleatorio.nextLong(5) + 1) * 1000;
+//
+//                Thread.sleep(tiempoEsperaPescador);
+//            }
         } catch (InterruptedException ex) {
             Logger.getLogger(Pescador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Recogiendo caña.");
+        
     }
 
 }

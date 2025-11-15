@@ -42,7 +42,7 @@ public class Gatos implements Runnable {
     @Override
     public void run() {
 
-        //do {
+//        do {
 //            switch (idGato) {
 //
 //                case 1:
@@ -56,18 +56,20 @@ public class Gatos implements Runnable {
 //                    break;
 //                default:
 //            }
+while (cesta.numPecesCestaPescador < 10){
+cesta.saludoGato();
             try {
-                while (cesta.numPecesCestaPescador < 10) {
+             
 
                     cesta.comerPez();
-                    System.out.println(String.format("%s ha cogido un pez. (CestaGatos: %d).", Thread.currentThread().getName(),cesta.numPecesCestaGatos));
                     Thread.sleep(25000);
-                }
+              
             } catch (InterruptedException ex) {
                 Logger.getLogger(Gatos.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        //} while (cesta.numPecesCestaPescador < 10);
+}
+//        } while (cesta.numPecesCestaPescador < 10);
+cesta.despedidaGato();
     }
 
 }
