@@ -38,7 +38,9 @@ public class Cesta {
 
         // Mientras no existan peces en la cesta, los gatos esperan
         while (numPecesCestaGatos < 1 && numPecesCestaPescador<10) {
+           // System.out.println(Thread.currentThread().getName()+" Hola pescador quiero un pez");
             notifyAll();
+           // System.out.println(Thread.currentThread().getName()+" me quedo esperando un pez");
             wait();
 //            if (numPecesCestaGatos != 0) {
 //                numPecesCestaGatos--;
