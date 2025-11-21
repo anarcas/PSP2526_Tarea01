@@ -16,60 +16,33 @@ public class Gatos implements Runnable {
 
     // Declaración de variables
     private final Cesta cesta;
-    private int idGato;
-
-    // Declaración de variables auxiliares
-    long tiempoComiendoPez;
-    Random numAleatorio = new Random();
-
-    // Colores 
-    public final String reset = "\u001B[0m";
-    public final String negro = "\u001B[30m";
-    public final String rojo = "\u001B[31m";
-    public final String verde = "\u001B[32m";
-    public final String amarillo = "\u001B[33m";
-    public final String azul = "\u001B[34m";
-    public final String magenta = "\u001B[35m";
-    public final String cian = "\u001B[36m";
-    public final String blanco = "\u001B[37m";
+    long tiempoComiendoPez=25000;
 
     // Constructor
-    public Gatos(Cesta cestaGatos, int idGato) {
+    public Gatos(Cesta cestaGatos) {
         this.cesta = cestaGatos;
-        this.idGato = idGato; // De momento no se ha necesitado este identificador único
     }
 
     @Override
     public void run() {
 
-//        do {
-//            switch (idGato) {
-//
-//                case 1:
-//                    System.out.println(String.format("%s%s %s %s", rojo, Thread.currentThread().getName(), cesta.mensajeGatos, reset));
-//                    break;
-//                case 2:
-//                    System.out.println(String.format("%s%s %s %s", verde, Thread.currentThread().getName(), cesta.mensajeGatos, reset));
-//                    break;
-//                case 3:
-//                    System.out.println(String.format("%s%s %s %s", amarillo, Thread.currentThread().getName(), cesta.mensajeGatos, reset));
-//                    break;
-//                default:
-//            }
-while (cesta.numPecesCestaPescador < 10){
-cesta.saludoGato();
-            try {
-             
+        while (cesta.numPecesCestaPescador < 10) {
+            
+            cesta.saludoGato();
+                    // Mientras el número de peces de la cesta del pescador sea menor de 10, cada gato saludará y tratará de coger un pez de la cesta de los gatos, posteriormente simulará un tiempo de 25 segundos comiéndose el pez empleando el método estático sleep() de la clase Thread 
 
-                    cesta.comerPez();
-                    Thread.sleep(25000);
-              
+            try {
+                
+                cesta.comerPez();
+                Thread.sleep(tiempoComiendoPez);
+
             } catch (InterruptedException ex) {
                 Logger.getLogger(Gatos.class.getName()).log(Level.SEVERE, null, ex);
+                Thread.currentThread().interrupt();
             }
-}
-//        } while (cesta.numPecesCestaPescador < 10);
-cesta.despedidaGato();
+        }
+        // Una vez se haya completado la cesta del pescador con 10 peces, los gatos se marcharán
+        cesta.despedidaGato();
     }
 
 }

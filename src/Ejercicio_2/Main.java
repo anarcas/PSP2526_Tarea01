@@ -4,7 +4,8 @@
  */
 package Ejercicio_2;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,35 +15,47 @@ public class Main {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.InterruptedException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
 
-        // DECLARACIÓN DE VARIABLES
+        // DECLARACIÓN/INSTANCIACIÓN DE VARIABLES
         String nombreGato;
-        int cestaPescador;
-        
+        List<Thread>hilosGatos=new ArrayList<>();
         
         // Recurso compartido
         Cesta cestaGatos = new Cesta();
         
-        // Hilos productor y consumidores
+        // Hilos productor (pescador) e hilos consumidores (gatos)
         Thread hiloPescador;
         Thread hiloGatos;
 
-        // INICIACIÓN DE HILOS
-        // HILO PESCADOR
-        hiloPescador = new Thread(new Pescador(cestaGatos), "Antonio");
+        
+        // INSTANCIACIÓN/INICIACIÓN DE HILOS
+        
+        // Hilo pescador
+        hiloPescador = new Thread(new Pescador(cestaGatos), "pescador");
         hiloPescador.start();
 
-        // HILOS GATOS
+        // Hilos gatos
         for (int i = 1; i <= 3; i++) {
             nombreGato = String.format("[GATO %d]", i);
-            hiloGatos = new Thread(new Gatos(cestaGatos,i), nombreGato);
+            hiloGatos = new Thread(new Gatos(cestaGatos), nombreGato);
+            hilosGatos.add(hiloGatos);
             hiloGatos.start();
 
         }
         
+        // Los hilos se esperan antes de terminar el programa
+        hiloPescador.join();
+        
+        for (Thread hilo:hilosGatos) {
+            hilo.join();
+        }
+        
+        // Mensaje de salida del programa mostrado en pantalla
+        System.out.println("¡Otro día de pesca finalizado!");
 
     }
 

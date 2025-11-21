@@ -141,7 +141,13 @@ public class Cesta {
                     System.out.println(String.format("%s%s %s %s", amarillo, Thread.currentThread().getName(), "ya si eso nos vemos", reset));
                     break;
                 default:
-            }
+            }}
+        
+     public void saludoPescador(){
+         
+         System.out.println(String.format("Hola soy %s y empiezo mi día de pesca, lanzando caña...",Thread.currentThread().getName()));
+         
+     }
         
     }
-}
+
