@@ -16,7 +16,7 @@ public class Gatos implements Runnable {
 
     // Declaración de variables
     private final Cesta cesta;
-    long tiempoComiendoPez=25000;
+    long tiempoComiendoPez = 25000; // Tiempo de simulación de los gatos comiendo un pez de 25 segundos.
 
     // Constructor
     public Gatos(Cesta cestaGatos) {
@@ -27,12 +27,13 @@ public class Gatos implements Runnable {
     public void run() {
 
         while (cesta.numPecesCestaPescador < 10) {
-            
-            cesta.saludoGato();
-                    // Mientras el número de peces de la cesta del pescador sea menor de 10, cada gato saludará y tratará de coger un pez de la cesta de los gatos, posteriormente simulará un tiempo de 25 segundos comiéndose el pez empleando el método estático sleep() de la clase Thread 
 
+            // Los gatos saludan al pescador indicando que se encuentra disponibles para coger un pez de la cesta de los gatos
+            cesta.saludoGato();
+
+            // Mientras el número de peces de la cesta del pescador sea menor de 10, cada gato saludará y tratará de coger un pez de la cesta de los gatos, posteriormente simulará un tiempo de 25 segundos comiéndose el pez empleando el método estático sleep() de la clase Thread 
             try {
-                
+
                 cesta.comerPez();
                 Thread.sleep(tiempoComiendoPez);
 
@@ -41,7 +42,7 @@ public class Gatos implements Runnable {
                 Thread.currentThread().interrupt();
             }
         }
-        // Una vez se haya completado la cesta del pescador con 10 peces, los gatos se marcharán
+        // Una vez se haya completado la cesta del pescador con 10 peces, los gatos se marcharán indicando el recuento de peces consumidos
         cesta.despedidaGato();
     }
 

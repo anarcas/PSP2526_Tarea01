@@ -26,21 +26,20 @@ public class Pescador implements Runnable {
 
     @Override
     public void run() {
-        // Salida al inicar el método run del hilo pescador
-        
+        // Saludo al inicar el método run del hilo pescador-productor
         cesta.saludoPescador();
         
         // Mientras el número de peces de la cesta del pescador sea menor de 10, el pescador intentará volver a pescar un pez simulando previamente un tiempo de pesca empleando el método estático sleep() de la clase Thread 
         try {
             
             while (cesta.numPecesCestaPescador < 10) {
-                
+                // Tiempo de simulación de pesca aleatorio entre 1 y 5 segundos
                 tiempoEsperaPescador = (numAleatorio.nextLong(5) + 1) * 1000;
                 Thread.sleep(tiempoEsperaPescador);
                 cesta.pescarPez();
             }
             
-            // Una vez el pescador ha completado su cesta con 10 peces, se notifica a los gatos en espera que se marcha hasta otro día
+            // Una vez el pescador ha completado su cesta con 10 peces, notifica a los gatos en espera que se marcha hasta otro día
             cesta.despedidaPescador();
 
         } catch (InterruptedException ex) {
