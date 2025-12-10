@@ -7,6 +7,14 @@ package Ejercicio_2;
 import java.util.Random;
 
 /**
+ ** Clase que representa el recurso compartido central entre el hilo productor
+ * (Pescador) y los hilos consumidores (Gatos).
+ *
+ * Gestiona dos cestas: la cesta personal del pescador (límite de 10 peces para
+ * finalizar) y la cesta de los gatos (capacidad máxima de 2 peces). Contiene la
+ * lógica sincronizada (wait/notify) para manejar la concurrencia y evitar el
+ * desbordamiento o agotamiento del recurso de los gatos. También gestiona
+ * contadores de peces y la presentación en consola con colores.
  *
  * @author Antonio Naranjo Castillo
  */
@@ -23,14 +31,11 @@ public class Cesta {
 
     // Colores 
     public final String reset = "\u001B[0m";
-    //public final String negro = "\u001B[30m";
     public final String rojo = "\u001B[31m";
     public final String verde = "\u001B[32m";
     public final String amarillo = "\u001B[33m";
-    //public final String azul = "\u001B[34m";
     public final String magenta = "\u001B[35m";
     public final String cian = "\u001B[36m";
-    //public final String blanco = "\u001B[37m";
 
     // Metodo saludoPescador() el hilo productor (pescador) imprime por pantalla su llegada al área de pesca. No se pide en la tarea, pero lo considero necesario como mensaje de inicio del hilo productor, de esta manera queda correspondido con el saludo de los gatos
     public void saludoPescador() {
@@ -39,12 +44,21 @@ public class Cesta {
 
     }
 
-    // Método sincronizado pescarPez() que será ejecutado por el pescador, hilo productor
+    /**
+     * Método sincronizado ejecutado por el hilo Pescador (Productor) para
+     * depositar un pez. El pescador elige aleatoriamente entre depositar en su
+     * cesta personal (hasta 10) o en la cesta de los gatos (capacidad máxima de
+     * 2). Si la cesta de los gatos está llena, el pescador se bloquea (wait).
+     * Si añade un pez a la cesta de los gatos, notifica a los hilos
+     * Consumidores (notifyAll).
+     *
+     * @throws InterruptedException Si el hilo es interrumpido mientras espera.
+     */
     public synchronized void pescarPez() throws InterruptedException {
 
         // Cesta elegida por el pescador, de manera aleatoria: 1-> colocará el pez en la cesta del pescador, 2-> colocará el pez en la cesta de los gatos
         eleccionPescador = numAleatorio.nextInt(numCestas) + 1;
-        
+
         // Una vez elegida la cesta, se procede a depositar el pez en ella estableciendo una estructura selectiva
         switch (eleccionPescador) {
 
@@ -72,7 +86,15 @@ public class Cesta {
         }
     }
 
-    // Método sincronizado comerPez() que será ejecutado por los gatos, hilos consumidores
+    /**
+     * Método sincronizado ejecutado por los hilos Gatos (Consumidores) para
+     * tomar un pez de su cesta. Si la cesta de los gatos está vacía y el
+     * pescador aún no ha terminado (menos de 10 peces), el gato se bloquea
+     * (wait). Si hay peces disponibles, consume uno, actualiza su contador
+     * personal de peces consumidos y notifica a otros hilos (notifyAll).
+     *
+     * @throws InterruptedException Si el hilo es interrumpido mientras espera.
+     */
     public synchronized void comerPez() throws InterruptedException {
 
         // Mientras no existan peces en la cesta, los gatos esperan y el número de peces de la cesta del pescador no haya alcanzado 10 piezas
@@ -82,7 +104,7 @@ public class Cesta {
             // El gato espera según las condiciones anteriores
             wait();
         }
-        
+
         // Si existe algún pez en la cesta de los gatos el gato lo cogerá
         if (numPecesCestaGatos > 0) {
             numPecesCestaGatos--;
@@ -112,10 +134,11 @@ public class Cesta {
 
     /**
      * Método sincronizado para llevar a cabo la despedida del pescador una vez
-     * alcanzados los 10 peces en su cesta personal, de esta manera se pueden
-     * advertir a los gatos para evitar que queden es espera infinita.
+     * alcanzados los 10 peces en su cesta personal. Si la condición de
+     * finalización se cumple (10 peces), se notifica a todos los hilos en
+     * espera (notifyAll) para sacarlos de un posible bloqueo infinito.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException Si el hilo es interrumpido.
      */
     public synchronized void despedidaPescador() throws InterruptedException {
         if (numPecesCestaPescador == 10) {
@@ -124,7 +147,12 @@ public class Cesta {
         }
     }
 
-    // Método saludoGato() donde los hilos consumidores (los gatos) muestran un mensaje en pantalla de un determinado color 
+    /**
+     * Método saludoGato() donde los hilos consumidores (los gatos) muestran un
+     * mensaje en pantalla de un determinado color según el ID del gato. Imprime
+     * un mensaje de saludo (Miau!) de un color específico que está ejecutando
+     * el método.
+     */
     public void saludoGato() {
 
         String[] numGato = Thread.currentThread().getName().split(" ");
@@ -147,7 +175,9 @@ public class Cesta {
     }
 
     /**
-     * Método necesario para mostrar en pantalla la despedida de los hilos consumidores y el número de peces consumidos.
+     * Muestra en pantalla el mensaje de despedida del hilo Gato (consumidor)
+     * junto con el recuento total de peces que ese gato ha logrado consumir
+     * durante la simulación.
      */
     public void despedidaGato() {
 

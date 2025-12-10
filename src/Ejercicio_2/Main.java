@@ -8,12 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Clase principal que inicializa y gestiona la simulación del patrón
+ * Productor-Consumidor (Pescador-Gatos). Su función es crear el recurso
+ * compartido (la Cesta), lanzar el hilo productor (Pescador) y varios hilos
+ * consumidores (Gatos), y esperar a que todos ellos finalicen antes de terminar
+ * el programa.
  *
  * @author Antonio Naranjo Castillo
  */
 public class Main {
 
     /**
+     * Método principal de la clase Main
      * @param args the command line arguments
      * @throws java.lang.InterruptedException
      */
@@ -22,18 +28,16 @@ public class Main {
 
         // DECLARACIÓN/INSTANCIACIÓN DE VARIABLES
         String nombreGato;
-        List<Thread>hilosGatos=new ArrayList<>();
-        
+        List<Thread> hilosGatos = new ArrayList<>();
+
         // Recurso compartido
         Cesta cestaGatos = new Cesta();
-        
+
         // Hilos productor (pescador) e hilos consumidores (gatos)
         Thread hiloPescador;
         Thread hiloGatos;
 
-        
         // INSTANCIACIÓN/INICIACIÓN DE HILOS
-        
         // Hilo pescador
         hiloPescador = new Thread(new Pescador(cestaGatos), "pescador");
         hiloPescador.start();
@@ -46,14 +50,14 @@ public class Main {
             hiloGatos.start();
 
         }
-        
+
         // Los hilos se esperan antes de terminar el programa
         hiloPescador.join();
-        
-        for (Thread hilo:hilosGatos) {
+
+        for (Thread hilo : hilosGatos) {
             hilo.join();
         }
-        
+
         // Mensaje de salida del programa mostrado en pantalla
         System.out.println("¡Otro día de pesca finalizado!");
 

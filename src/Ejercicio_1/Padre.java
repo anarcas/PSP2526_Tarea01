@@ -9,19 +9,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
+ * Clase que actúa como coordinador principal de la aplicación, simulando el rol
+ * de un padre. Su función es leer comandos o peticiones de la entrada estándar
+ * (simulando a la Madre), ejecutar un proceso externo (la clase Hijo) pasándole
+ * esa petición como argumento, y luego procesar el código de salida y la
+ * respuesta del Hijo.
  *
  * @author Antonio Naranjo Castillo
  */
 public class Padre {
 
     /**
+     * Método main de la clase Padre Lee continuamente líneas de la entrada
+     * estándar (System.in). Por cada línea, ejecuta la clase 'Hijo' y utiliza
+     * el contenido de la línea como argumento. Espera a que el proceso 'Hijo'
+     * termine y verifica su código de salida.
+     *
      * @param args the command line arguments
-     * @throws java.lang.InterruptedException
-     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException Si el hilo principal es
+     * interrumpido mientras espera la finalización del Hijo.
+     * @throws java.io.IOException Si ocurre un error de E/S durante la lectura
+     * de la entrada o el manejo del proceso.
      */
     public static void main(String[] args) throws InterruptedException, IOException {
         // TODO code application logic here
 
+        // Declaración de variables
         BufferedReader bfMadre;
         String lineaMadre;
 
@@ -31,8 +44,8 @@ public class Padre {
         String lineaHijo;
         int exit;
 
-        // Se imprime la petición de la madre
-        bfMadre = new BufferedReader(new InputStreamReader(System.in));
+        // Se imprime la petición de la madre usando configuración UTF-8
+        bfMadre = new BufferedReader(new InputStreamReader(System.in,"UTF-8"));
         while ((lineaMadre = bfMadre.readLine()) != null) {
             System.out.println("Madre: " + lineaMadre);
 
@@ -40,8 +53,8 @@ public class Padre {
             pbHijo = new ProcessBuilder("java", "Hijo.java", lineaMadre);
             psHijo = pbHijo.start();
 
-            // Se recoge el mensaje del proceso Hijo
-            brHijo = new BufferedReader(new InputStreamReader(psHijo.getInputStream()));
+            // Se recoge el mensaje del proceso Hijo usando configuración UTF-8
+            brHijo = new BufferedReader(new InputStreamReader(psHijo.getInputStream(),"UTF-8"));
             // Se espera que el proceso Hijo responda
             System.out.println("(Despertando a Mario)");
             // Se espera a que el proceso Hijo termine

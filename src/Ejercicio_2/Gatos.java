@@ -9,6 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Clase que implementa la interfaz Runnable y simula el rol de los Consumidores
+ * en el patrón Productor-Consumidor, los gatos. Los hilos Gatos intentan
+ * consumir peces de la Cesta compartida de forma continua mientras la condición
+ * de finalización (la Cesta del Pescador con menos de 10 peces) no se cumpla.
+ * Tras consumir un pez, simulan un tiempo de espera mediante el método estatico
+ * sleep() de la clase Thread para representar el tiempo que tardan en comer.
  *
  * @author Antonio Naranjo Castillo
  */
@@ -23,6 +29,7 @@ public class Gatos implements Runnable {
         this.cesta = cestaGatos;
     }
 
+    // Se sobreescribe el método run
     @Override
     public void run() {
 

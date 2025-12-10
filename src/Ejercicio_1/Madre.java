@@ -5,12 +5,17 @@
 package Ejercicio_1;
 
 /**
+ * Clase que simula el rol de la madre como origen o fuente de las peticiones Su
+ * función principal es generar un mensaje predefinido y enviarlo a la salida
+ * estándar, para ser capturado por la clase Padre a través de tubería
  *
  * @author Antonio Naranjo Castillo
  */
 public class Madre {
 
     /**
+     * Método main de la clase Madre
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
