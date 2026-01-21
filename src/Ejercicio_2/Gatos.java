@@ -4,10 +4,6 @@
  */
 package Ejercicio_2;
 
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Clase que implementa la interfaz Runnable y simula el rol de los Consumidores
  * en el patrón Productor-Consumidor, los gatos. Los hilos Gatos intentan
@@ -45,7 +41,7 @@ public class Gatos implements Runnable {
                 Thread.sleep(tiempoComiendoPez);
 
             } catch (InterruptedException ex) {
-                Logger.getLogger(Gatos.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println(String.format("Hilo %s interrumpido: %s", Thread.currentThread().getName(), ex.getMessage()));
                 Thread.currentThread().interrupt();
             }
         }

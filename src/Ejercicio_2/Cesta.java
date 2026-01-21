@@ -4,8 +4,6 @@
  */
 package Ejercicio_2;
 
-import java.util.Random;
-
 /**
  ** Clase que representa el recurso compartido central entre el hilo productor
  * (Pescador) y los hilos consumidores (Gatos).
@@ -23,9 +21,7 @@ public class Cesta {
     // Declaración de variables e iniciación si procede
     int numPecesCestaGatos = 0;
     int numPecesCestaPescador = 0;
-    int numCestas = 2;
-    Random numAleatorio = new Random();
-    int eleccionPescador;
+
     String mensajeGatos = "Miau!";
     int[] numPecesComidos = {0, 0, 0};
 
@@ -46,44 +42,22 @@ public class Cesta {
 
     /**
      * Método sincronizado ejecutado por el hilo Pescador (Productor) para
-     * depositar un pez. El pescador elige aleatoriamente entre depositar en su
-     * cesta personal (hasta 10) o en la cesta de los gatos (capacidad máxima de
-     * 2). Si la cesta de los gatos está llena, el pescador se bloquea (wait).
-     * Si añade un pez a la cesta de los gatos, notifica a los hilos
-     * Consumidores (notifyAll).
+     * depositar un pez en la cesta de los gatos. Si la cesta de los gatos está
+     * llena, el pescador se bloquea (wait). Si añade un pez a la cesta de los
+     * gatos, notifica a los gatos o hilos Consumidores (notifyAll).
      *
      * @throws InterruptedException Si el hilo es interrumpido mientras espera.
      */
-    public synchronized void pescarPez() throws InterruptedException {
-
-        // Cesta elegida por el pescador, de manera aleatoria: 1-> colocará el pez en la cesta del pescador, 2-> colocará el pez en la cesta de los gatos
-        eleccionPescador = numAleatorio.nextInt(numCestas) + 1;
-
-        // Una vez elegida la cesta, se procede a depositar el pez en ella estableciendo una estructura selectiva
-        switch (eleccionPescador) {
-
-            case 1:
-                // Si el número de peces en la cesta del pescador es inferior a 10, entonces un pez más en su cesta personal
-                if (numPecesCestaPescador < 10) {
-                    numPecesCestaPescador++;
-                    System.out.println(String.format("%sEl pescador guarda un pez en su cesta personal. (CestaPescador: %d)%s", cian, numPecesCestaPescador, reset));
-                }
-                break;
-            case 2:
-                // Mientras el número de peces de la cesta de los gatos sea igual a 2, el pescador espera que un gato coja un pez antes de depositarlo
-                while (numPecesCestaGatos == 2) {
-                    System.out.println(String.format("%sEl pescador espera para dejar un pez en la cesta de los gatos. (CestaGatos: %d)%s", magenta, numPecesCestaGatos, reset));
-                    wait();
-                }
-                // Si no se cumple la condición del bucle while anterior entonces incrementa el número de peces de la cesta de los gatos y notifica a los gatos que hay un nuevo pez en su cesta
-                numPecesCestaGatos++;
-                System.out.println(String.format("%sEl pescador deja un pez en la cesta de los gatos. (CestaGatos: %d)%s", cian, numPecesCestaGatos, reset));
-                notifyAll();
-                break;
-            default:
-                // En caso que el usuario cambie la variable numCestas>2 entoces se lanzará un mensaje de error que advierta al programador que debe actualizar la estructura selectiva.
-                System.out.println(String.format("%sExiste un error en la elección tomada por el pescador o existen más de dos cestas.%s", rojo, reset));
+    public synchronized void alimentarGatos() throws InterruptedException {
+        // Mientras el número de peces de la cesta de los gatos sea igual a 2, el pescador espera que un gato coja un pez antes de depositarlo
+        while (numPecesCestaGatos == 2) {
+            System.out.println(String.format("%sEl pescador espera para dejar un pez en la cesta de los gatos. (CestaGatos: %d)%s", magenta, numPecesCestaGatos, reset));
+            wait();
         }
+        // Si no se cumple la condición del bucle while anterior entonces incrementa el número de peces de la cesta de los gatos y notifica a los gatos que hay un nuevo pez en su cesta
+        numPecesCestaGatos++;
+        System.out.println(String.format("%sEl pescador deja un pez en la cesta de los gatos. (CestaGatos: %d)%s", cian, numPecesCestaGatos, reset));
+        notifyAll();
     }
 
     /**
@@ -99,8 +73,6 @@ public class Cesta {
 
         // Mientras no existan peces en la cesta, los gatos esperan y el número de peces de la cesta del pescador no haya alcanzado 10 piezas
         while (numPecesCestaGatos < 1 && numPecesCestaPescador < 10) {
-            // El gato notifica que está en estado de espera hasta que o bien en la cesta de los gatos exista un pez o bien el número de peces de la cesta del pescador sea menor de 10
-            notifyAll();
             // El gato espera según las condiciones anteriores
             wait();
         }
@@ -108,6 +80,8 @@ public class Cesta {
         // Si existe algún pez en la cesta de los gatos el gato lo cogerá
         if (numPecesCestaGatos > 0) {
             numPecesCestaGatos--;
+            // El gato notifica al pescador (y al resto de los gatos) que ha cogido un pez, debe ser notifyAll() para asegurarnos que no llame a otro gato que se encuentre en espera y se quede la aplicación en un bucle infinito
+            notifyAll();
             String[] numGato = Thread.currentThread().getName().split(" ");
             int idGato = Integer.parseInt(numGato[1].split("]")[0]);
 
